@@ -5,6 +5,7 @@ import About from "./components/Server-SideRendering/About";
 import Articles from "./components/Server-SideRendering/Articles";
 import StateApp from "./components/StateManagement/useState/StateApp";
 import ContextApp from "./components/StateManagement/Context/ContextApp";
+import RecoilApp from "./components/StateManagement/Recoil/RecoilApp";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Link to="/articles">Articles</Link>
             <Link to="/counter">Counter</Link>
             <Link to="/counter-context">Counter Context</Link>
+            <Link to="/counter-recoil">Counter Recoil</Link>
           </li>
         </ul>
         <Routes>
@@ -25,6 +27,7 @@ function App() {
           <Route exact path="/articles" element={<Articles />} />
           <Route exact path="/counter" element={<StateApp />} />
           <Route exact path="/counter-context" element={<ContextApp />} />
+          <Route exact path="/counter-recoil" element={<RecoilApp />} />
         </Routes>
       </Router>
     </>
