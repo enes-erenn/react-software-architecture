@@ -6,23 +6,56 @@ import App from "./src/App";
 import path from "path";
 import fs from "fs";
 import { ServerStyleSheet } from "styled-components";
+import { InitialDataContext } from "./src/InitialDataContext";
+import "isomorphic-fetch";
+
+global.window = {};
+
 const app = express();
 
 /* Server is using the static files which is builded */
 app.use(express.static("./build", { index: false }));
 
-app.get("/*", (req, res) => {
+const articles = [
+  { title: "Article 1", author: "Bob" },
+  { title: "Article 2", author: "Betty" },
+  { title: "Article 3", author: "Frank" },
+];
+
+app.get("/api/articles", (req, res) => {
+  res.json(articles);
+});
+
+app.get("/*", async (req, res) => {
   // Reaching styles in the app
   const sheet = new ServerStyleSheet();
 
-  const reactApp = renderToString(
+  const contextObj = { _isServerSide: true, _requests: [], _data: {} };
+
+  renderToString(
     // Covering the app with the styles
     sheet.collectStyles(
-      // Server-Side routing
+      <InitialDataContext.Provider value={contextObj}>
+        {/*    // Server-Side routing */}
+        <StaticRouter location={req.url}>
+          <App />
+        </StaticRouter>
+      </InitialDataContext.Provider>
+    )
+  );
+
+  await Promise.all(contextObj._requests);
+  contextObj._isServerSide = false;
+  delete contextObj._requests;
+
+  const reactApp = renderToString(
+    // Covering the app with the styles
+    <InitialDataContext.Provider value={contextObj}>
+      {/*    // Server-Side routing */}
       <StaticRouter location={req.url}>
         <App />
       </StaticRouter>
-    )
+    </InitialDataContext.Provider>
   );
 
   // We saying to the server that you need to render the html that end of the this path
@@ -31,9 +64,15 @@ app.get("/*", (req, res) => {
     if (err) {
       return res.status(500).send(err);
     }
+
     return res.send(
       data
-        .replace('<div id="root"></div>', `<div id="root">${reactApp}</div>`)
+        .replace(
+          '<div id="root"></div>',
+          `<script>window.preloadedData = ${JSON.stringify(
+            contextObj
+          )}</script><div id="root">${reactApp}</div>`
+        )
         .replace("{{ styles }}", sheet.getStyleTags())
     );
   });
