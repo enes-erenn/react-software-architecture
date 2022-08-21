@@ -4,6 +4,7 @@ import Home from "./components/Server-SideRendering/Home";
 import About from "./components/Server-SideRendering/About";
 import Articles from "./components/Server-SideRendering/Articles";
 import StateApp from "./components/StateManagement/useState/StateApp";
+import ContextApp from "./components/StateManagement/Context/ContextApp";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Link to="/about">About</Link>
             <Link to="/articles">Articles</Link>
             <Link to="/counter">Counter</Link>
+            <Link to="/counter-context">Counter Context</Link>
           </li>
         </ul>
         <Routes>
@@ -22,6 +24,7 @@ function App() {
           <Route exact path="/about" element={<About />} />
           <Route exact path="/articles" element={<Articles />} />
           <Route exact path="/counter" element={<StateApp />} />
+          <Route exact path="/counter-context" element={<ContextApp />} />
         </Routes>
       </Router>
     </>
