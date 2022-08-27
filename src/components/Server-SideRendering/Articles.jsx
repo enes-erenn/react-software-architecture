@@ -1,5 +1,18 @@
 import React from "react";
+import styled from "styled-components";
 import useDataSSR from "../../useDataSSR";
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+`;
 
 const Articles = () => {
   const articles = useDataSSR("articles", () => {
@@ -12,7 +25,7 @@ const Articles = () => {
   });
 
   return (
-    <>
+    <Container>
       {articles &&
         articles.map((article) => (
           <div key={article.title}>
@@ -20,7 +33,7 @@ const Articles = () => {
             <h3>{article.author}</h3>
           </div>
         ))}
-    </>
+    </Container>
   );
 };
 

@@ -1,13 +1,13 @@
 import express from "express";
 import React from "react";
+import "isomorphic-fetch";
+import path from "path";
+import fs from "fs";
 import { StaticRouter } from "react-router-dom/server";
 import { renderToString } from "react-dom/server";
 import App from "./src/App";
-import path from "path";
-import fs from "fs";
 import { ServerStyleSheet } from "styled-components";
 import { InitialDataContext } from "./src/InitialDataContext";
-import "isomorphic-fetch";
 
 global.window = {};
 
@@ -16,16 +16,19 @@ const app = express();
 /* Server is using the static files which is builded */
 app.use(express.static("./build", { index: false }));
 
+// Data
 const articles = [
   { title: "Article 1", author: "Bob" },
   { title: "Article 2", author: "Betty" },
   { title: "Article 3", author: "Frank" },
 ];
 
+// Route that we sent the data
 app.get("/api/articles", (req, res) => {
   res.json(articles);
 });
 
+// We saying all the styles should be applied for all routes right here
 app.get("/*", async (req, res) => {
   // Reaching styles in the app
   const sheet = new ServerStyleSheet();
@@ -36,7 +39,7 @@ app.get("/*", async (req, res) => {
     // Covering the app with the styles
     sheet.collectStyles(
       <InitialDataContext.Provider value={contextObj}>
-        {/*    // Server-Side routing */}
+        {/* Server-Side routing */}
         <StaticRouter location={req.url}>
           <App />
         </StaticRouter>

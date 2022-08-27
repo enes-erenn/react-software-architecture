@@ -6,26 +6,28 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
 import { InitialDataContext } from "./InitialDataContext";
 
-ReactDOM.hydrate(
+{
+  /* Routing in the server side */
+}
+/* ReactDOM.hydrate(
   <React.StrictMode>
     <InitialDataContext.Provider
       value={(window && window.preloadedData) || { _data: {} }}
     >
-      {/* Routing in the server side */}
       <Router>
         <App />
       </Router>
     </InitialDataContext.Provider>
   </React.StrictMode>,
   document.getElementById("root")
-);
+); */
 
-/* const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
-); */
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
